@@ -72,36 +72,8 @@ private:
 
     bool OnCreate(HWND, LPCREATESTRUCT) noexcept
     {
-        PCWSTR buttonClass = L"button";
-
-        m_button1 = wil::unique_hwnd(CreateWindowW(buttonClass, L"Button &1",
-            WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON | WS_TABSTOP,
-            (ButtonMargin + InitialWidth - ButtonWidth) / 2, ButtonMargin,
-            ButtonWidth, ButtonHeight,
-            WindowHandle(), reinterpret_cast<HMENU>(IDM_ButtonID1), m_instance, nullptr));
-
-        DEVICE_SCALE_FACTOR scaleFactor{};
-        winrt::check_hresult(GetScaleFactorForMonitor(MonitorFromWindow(WindowHandle(), 0), &scaleFactor));
-        const auto dpi = static_cast<int>(scaleFactor) / 100.0f;
-
-#define LOAD_XAML_FROM_RESOURCE
-#ifdef LOAD_XAML_FROM_RESOURCE
-        // Demonstrate loading Xaml from a Win32 resource
-        m_xamlButton = LoadXamlControl<winrt::Windows::UI::Xaml::Controls::Button>(IDR_XAML_BUTTON1);
-        m_xamlButton.Height(ButtonHeight / dpi);
-        m_xamlButton.Width(ButtonWidth / dpi);
-        m_buttonClickRevoker = m_xamlButton.Click(winrt::auto_revoke, { this, &AppWindow::OnXamlButtonClick });
-        m_xamlButton1 = CreateDesktopWindowsXamlSource(WS_TABSTOP, m_xamlButton);
-#endif
-
         m_mainUserControl = winrt::MyApp::MainUserControl();
         m_xamlIsland = CreateDesktopWindowsXamlSource(WS_TABSTOP, m_mainUserControl);
-
-        m_button2 = wil::unique_hwnd(CreateWindowW(buttonClass, L"Button &2",
-            WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON | WS_TABSTOP,
-            (ButtonMargin + InitialWidth - ButtonWidth) / 2, InitialHeight - ButtonMargin - ButtonHeight,
-            ButtonWidth, ButtonHeight,
-            WindowHandle(), reinterpret_cast<HMENU>(IDM_ButtonID2), m_instance, nullptr));
 
         return true;
     }

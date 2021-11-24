@@ -14,11 +14,11 @@ namespace winrt::MyApp::implementation
 
     winrt::hstring MainUserControl::MyProperty()
     {
-        return userControl().MyProperty();
+        return winrt::hstring{};
     }
 
     void MainUserControl::MyProperty(winrt::hstring value)
     {
-        userControl().MyProperty(value);
+       // userControl().MyProperty(value);
     }
 }
